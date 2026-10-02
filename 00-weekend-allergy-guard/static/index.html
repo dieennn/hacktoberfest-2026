@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allergy & Diet Guard — Open-Source Food Safety for Friends</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 24px 16px; min-height: 100vh; }
+    .container { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    header { text-align: center; margin-bottom: 8px; }
+    header h1 { font-size: 2rem; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    header p { color: var(--text-muted); margin-top: 6px; font-size: 0.95rem; }
+    .badge-open { display: inline-block; background: #0369a1; color: #e0f2fe; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; margin-top: 6px; }
+    
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .card h2 { font-size: 1.15rem; color: #e2e8f0; border-bottom: 1px solid var(--card-border); padding-bottom: 8px; }
+
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-sm { background: #334155; color: #cbd5e1; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+    .btn-sm:hover { background: #475569; color: #fff; }
+
+    label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+    input[type="text"], textarea { width: 100%; background: #0f172a; border: 1px solid var(--card-border); border-radius: 8px; padding: 10px; color: #fff; font-size: 0.9rem; }
+    input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--primary); }
+    textarea { min-height: 110px; resize: vertical; }
+
+    .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; background: #0f172a; padding: 8px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; }
+    .checkbox-item:hover { border-color: #475569; }
+    .checkbox-item input { accent-color: var(--primary); }
+
+    .btn-primary { background: var(--primary); color: #0f172a; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .verdict-card { padding: 16px; border-radius: 10px; margin-top: 10px; border: 1px solid transparent; }
+    .verdict-DANGER { background: rgba(239, 68, 68, 0.15); border-color: var(--danger); color: #fca5a5; }
+    .verdict-WARNING { background: rgba(245, 158, 11, 0.15); border-color: var(--warning); color: #fde68a; }
+    .verdict-SAFE { background: rgba(16, 185, 129, 0.15); border-color: var(--success); color: #6ee7b7; }
+
+    .verdict-header { display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 1.2rem; }
+    .verdict-summary { margin-top: 8px; font-size: 0.9rem; line-height: 1.4; color: #f8fafc; }
+
+    .hazards-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .hazard-item { background: #0f172a; border-left: 4px solid var(--danger); padding: 8px 12px; border-radius: 4px; font-size: 0.85rem; }
+    .hazard-item strong { color: #f87171; }
+
+    .chef-box { background: #0f172a; border: 1px dashed var(--card-border); border-radius: 8px; padding: 12px; font-size: 0.85rem; color: #cbd5e1; white-space: pre-wrap; font-family: monospace; }
+    .copy-btn { align-self: flex-start; background: #334155; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-top: 6px; }
+    .copy-btn:hover { background: #475569; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🛡️ Allergy & Diet Guard</h1>
+      <p>Local open-source AI food safety scanner built for protecting friends with severe allergies.</p>
+      <span class="badge-open">100% Local Inference • No Cloud Privacy Leaks • Open-Weights Compatible</span>
+    </header>
+
+    <div class="grid">
+      <!-- Friend Profile Column -->
+      <div class="card">
+        <h2>👤 Friend's Allergy & Diet Profile</h2>
+        
+        <div>
+          <label>Quick Presets for Loved Ones:</label>
+          <div class="btn-group" style="margin-top: 6px;">
+            <button class="btn-sm" onclick="applyPreset('sarah')">Sarah (Peanut + Celiac + Dairy)</button>
+            <button class="btn-sm" onclick="applyPreset('budi')">Budi (Shellfish + Halal)</button>
+            <button class="btn-sm" onclick="applyPreset('alex')">Alex (Vegan + Tree Nuts)</button>
+          </div>
+        </div>
+
+        <div>
+          <label for="friendName">Friend's Name:</label>
+          <input type="text" id="friendName" value="Sarah">
+        </div>
+
+        <div>
+          <label>Monitored Allergens (FDA Big 9 + Obscure Aliases):</label>
+          <div class="checkbox-grid" id="allergenOptions" style="margin-top: 6px;"></div>
+        </div>
+
+        <div>
+          <label>Dietary Restrictions:</label>
+          <div class="checkbox-grid" id="dietOptions" style="margin-top: 6px;"></div>
+        </div>
+      </div>
+
+      <!-- Food & Ingredient Input Column -->
+      <div class="card">
+        <h2>🍲 Inspect Menu / Ingredients</h2>
+        <div>
+          <label>Test Sample Dishes:</label>
+          <div class="btn-group" style="margin-top: 6px;">
+            <button class="btn-sm" onclick="pasteSample('satay')">Satay Pad Thai (Contains Peanut)</button>
+            <button class="btn-sm" onclick="pasteSample('seitan')">Vegan Roast (Hidden Gluten Seitan)</button>
+            <button class="btn-sm" onclick="pasteSample('safe_salmon')">Grilled Salmon (Clean / Safe)</button>
+          </div>
+        </div>
+
+        <div>
+          <label for="ingredientsInput">Paste Ingredients, Menu Description, or Product Label:</label>
+          <textarea id="ingredientsInput" placeholder="e.g. Sautéed rice noodles with tofu, bean sprouts, crushed peanuts, tamarind paste, and arachis oil."></textarea>
+        </div>
+
+        <button class="btn-primary" onclick="runAnalysis()">⚡ Check Safety for Friend</button>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsCard" class="card" style="display: none;">
+      <h2>📋 Safety Assessment & Kitchen Protocols</h2>
+      <div id="verdictContainer"></div>
+
+      <div id="hazardsContainer"></div>
+
+      <div id="crossContactContainer"></div>
+
+      <div style="margin-top: 10px;">
+        <label>👨‍🍳 Kitchen Safety Card (Show to Waiter / Chef):</label>
+        <div class="btn-group" style="margin: 6px 0;">
+          <button class="btn-sm" onclick="switchChefLang('en')">English</button>
+          <button class="btn-sm" onclick="switchChefLang('id')">Bahasa Indonesia</button>
+        </div>
+        <div class="chef-box" id="chefCardText"></div>
+        <button class="copy-btn" onclick="copyChefCard()">📋 Copy Card Text</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentChefCard = { en: "", id: "" };
+    let currentChefLang = "en";
+
+    const ALLERGENS = [
+      { id: "peanut", label: "🥜 Peanut / Groundnut" },
+      { id: "gluten", label: "🌾 Gluten / Wheat / Celiac" },
+      { id: "dairy", label: "🥛 Dairy / Milk / Casein" },
+      { id: "shellfish", label: "🦐 Shellfish / Crustaceans" },
+      { id: "tree_nuts", label: "🌰 Tree Nuts (Almond, Cashew)" },
+      { id: "egg", label: "🥚 Egg / Albumin" },
+      { id: "soy", label: "🌱 Soy / Soybean" }
+    ];
+
+    const DIETS = [
+      { id: "halal", label: "🌙 Halal" },
+      { id: "vegan", label: "🥗 Vegan" }
+    ];
+
+    const SAMPLES = {
+      satay: "Pad thai noodles with fried egg, bean sprouts, crushed peanuts, scallions, cooked with arachis oil and fish sauce.",
+      seitan: "Vegetarian plant-based BBQ bowl with roasted seitan chunks, malt extract sauce, steamed corn, and barley pearls.",
+      safe_salmon: "Pan-seared Atlantic salmon fillet with extra virgin olive oil, sea salt, cracked black pepper, steamed broccoli, and jasmine rice."
+    };
+
+    function initUI() {
+      const aContainer = document.getElementById("allergenOptions");
+      ALLERGENS.forEach(a => {
+        aContainer.innerHTML += `
+          <label class="checkbox-item">
+            <input type="checkbox" name="allergen" value="${a.id}"> ${a.label}
+          </label>
+        `;
+      });
+
+      const dContainer = document.getElementById("dietOptions");
+      DIETS.forEach(d => {
+        dContainer.innerHTML += `
+          <label class="checkbox-item">
+            <input type="checkbox" name="diet" value="${d.id}"> ${d.label}
+          </label>
+        `;
+      });
+
+      applyPreset("sarah");
+    }
+
+    function applyPreset(name) {
+      document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+      if (name === "sarah") {
+        document.getElementById("friendName").value = "Sarah";
+        setChecked("allergen", ["peanut", "gluten", "dairy"]);
+      } else if (name === "budi") {
+        document.getElementById("friendName").value = "Budi";
+        setChecked("allergen", ["shellfish"]);
+        setChecked("diet", ["halal"]);
+      } else if (name === "alex") {
+        document.getElementById("friendName").value = "Alex";
+        setChecked("allergen", ["tree_nuts"]);
+        setChecked("diet", ["vegan"]);
+      }
+    }
+
+    function setChecked(name, values) {
+      document.querySelectorAll(`input[name="${name}"]`).forEach(c => {
+        if (values.includes(c.value)) c.checked = true;
+      });
+    }
+
+    function pasteSample(key) {
+      document.getElementById("ingredientsInput").value = SAMPLES[key] || "";
+    }
+
+    async function runAnalysis() {
+      const friendName = document.getElementById("friendName").value.trim() || "My Friend";
+      const allergens = Array.from(document.querySelectorAll('input[name="allergen"]:checked')).map(c => c.value);
+      const diets = Array.from(document.querySelectorAll('input[name="diet"]:checked')).map(c => c.value);
+      const ingredients = document.getElementById("ingredientsInput").value.trim();
+
+      if (!ingredients) {
+        alert("Please enter food ingredients or a menu description to analyze.");
+        return;
+      }
+
+      const payload = {
+        ingredients: ingredients,
+        profile: {
+          friend_name: friendName,
+          allergens: allergens,
+          dietary_restrictions: diets
+        }
+      };
+
+      try {
+        const resp = await fetch("/api/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await resp.json();
+        renderResults(data);
+      } catch (err) {
+        alert("Failed to analyze: " + err.message);
+      }
+    }
+
+    function renderResults(data) {
+      document.getElementById("resultsCard").style.display = "flex";
+      
+      const vContainer = document.getElementById("verdictContainer");
+      const icon = data.verdict === "DANGER" ? "🔴" : data.verdict === "WARNING" ? "🟡" : "🟢";
+      vContainer.innerHTML = `
+        <div class="verdict-card verdict-${data.verdict}">
+          <div class="verdict-header">
+            <span>${icon} VERDICT: ${data.verdict}</span>
+            <span style="font-size: 0.8rem; font-weight: normal;">Checked for ${data.friend_name}</span>
+          </div>
+          <div class="verdict-summary">${data.summary}</div>
+          ${data.llm_insight ? `<div style="margin-top: 8px; font-size: 0.85rem; font-style: italic; opacity: 0.9;">💡 AI Advice: ${data.llm_insight}</div>` : ''}
+        </div>
+      `;
+
+      const hContainer = document.getElementById("hazardsContainer");
+      if (data.hazards && data.hazards.length > 0) {
+        let html = '<label>⚠️ Identified Allergens & Contaminants:</label><div class="hazards-list">';
+        data.hazards.forEach(h => {
+          html += `
+            <div class="hazard-item">
+              <strong>${h.label}</strong> [Severity: ${h.severity.toUpperCase()}]<br>
+              ${h.reason}
+            </div>
+          `;
+        });
+        html += '</div>';
+        hContainer.innerHTML = html;
+      } else {
+        hContainer.innerHTML = '';
+      }
+
+      currentChefCard = data.chef_card || { en: "", id: "" };
+      switchChefLang(currentChefLang);
+    }
+
+    function switchChefLang(lang) {
+      currentChefLang = lang;
+      document.getElementById("chefCardText").textContent = currentChefCard[lang] || "No card generated.";
+    }
+
+    function copyChefCard() {
+      const text = document.getElementById("chefCardText").textContent;
+      navigator.clipboard.writeText(text);
+      alert("Chef card copied to clipboard!");
+    }
+
+    window.onload = initUI;
+  </script>
+</body>
+</html>
