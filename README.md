@@ -27,6 +27,17 @@
 
 ---
 
+## 🚀 Unified Deployment (Render Free Tier)
+
+All 5 challenge applications are unified under a single root gateway (`main.py`) to run permanently on Render's free tier without exceeding service hour limits.
+
+- **Start Command**: `python main.py`
+- **Root URL (`/`)**: Central Challenge Hub Portal
+- **Weekend App (`/weekend/`)**: Allergy & Diet Guard App
+- **Upcoming Apps (`/week-1/` ... `/week-4/`)**: Automatically routed as rounds unlock
+
+---
+
 ## 📋 Hacktoberfest 2026 Roadmap
 See [BACKLOG.md](./BACKLOG.md) for full tracking of all 24 virtual stickers and milestone progress.
 

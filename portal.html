@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacktoberfest 2026 — Open-Source AI Suite by @dieennn</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #151d2f;
+      --card-border: #23304a;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --accent: #f59e0b;
+      --success: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 32px 16px; min-height: 100vh; }
+    .container { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+    header { text-align: center; }
+    header h1 { font-size: 2.2rem; color: #fff; margin-bottom: 8px; }
+    header p { color: var(--text-muted); font-size: 1rem; max-width: 650px; margin: 0 auto; line-height: 1.5; }
+    .meta-badges { display: flex; gap: 10px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+    .badge { padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+    .badge-primary { background: #0369a1; color: #e0f2fe; }
+    .badge-render { background: #1e293b; border: 1px solid #475569; color: #cbd5e1; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { transform: translateY(-2px); border-color: #3b82f6; }
+    .card.active { border-left: 4px solid var(--primary); }
+    .card.upcoming { opacity: 0.7; }
+    
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .card-title { font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .card-subtitle { font-size: 0.82rem; color: var(--accent); font-weight: 600; text-transform: uppercase; margin-top: 4px; }
+    .card-status { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; font-weight: 600; }
+    .status-live { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .status-soon { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+
+    .card-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.45; }
+    
+    .card-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .btn { text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .btn-launch { background: var(--primary); color: #0b0f19; }
+    .btn-launch:hover { background: var(--primary-hover); }
+    .btn-outline { background: #1e293b; color: #e2e8f0; border: 1px solid var(--card-border); }
+    .btn-outline:hover { background: #334155; }
+    .btn-disabled { background: #1e293b; color: #64748b; cursor: not-allowed; border: 1px solid #334155; }
+
+    footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 24px; border-top: 1px solid var(--card-border); padding-top: 18px; }
+    footer a { color: var(--primary); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎃 Hacktoberfest 2026 AI Suite</h1>
+      <p>A unified open-source AI applications monorepo deployed on Render, tackling all 5 Hacktoberfest DEV Challenges.</p>
+      <div class="meta-badges">
+        <span class="badge badge-primary">AI belongs to everyone</span>
+        <span class="badge badge-render">Hosted on Render (Unified Gateway)</span>
+        <span class="badge badge-render">Created by @dieennn</span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Challenge 0: Weekend Challenge -->
+      <div class="card active">
+        <div>
+          <div class="card-header">
+            <div>
+              <div class="card-title">🛡️ Allergy & Diet Guard</div>
+              <div class="card-subtitle">Launch Weekend • Build for a Friend</div>
+            </div>
+            <span class="card-status status-live">● LIVE</span>
+          </div>
+          <p class="card-desc" style="margin-top: 10px;">
+            A local-first food safety sentinel for friends with severe anaphylactic allergies and celiac disease. Inspects ingredients, catches obscure aliases, flags cross-contamination, and generates bilingual chef safety cards.
+          </p>
+        </div>
+        <div class="card-actions">
+          <a href="/weekend/" class="btn btn-launch">🚀 Launch App</a>
+          <a href="https://github.com/dieennn/hacktoberfest-2026/tree/main/00-weekend-allergy-guard" target="_blank" class="btn btn-outline">📂 Source Code</a>
+          <a href="https://dev.to/dieennn" target="_blank" class="btn btn-outline">📝 DEV Post</a>
+        </div>
+      </div>
+
+      <!-- Challenge 1: Week 1 -->
+      <div class="card upcoming">
+        <div>
+          <div class="card-header">
+            <div>
+              <div class="card-title">⚡ Week 1 AI Challenge</div>
+              <div class="card-subtitle">Weekly Round 1 • Oct 5 – Oct 12</div>
+            </div>
+            <span class="card-status status-soon">⏳ Oct 5</span>
+          </div>
+          <p class="card-desc" style="margin-top: 10px;">
+            Upcoming Hacktoberfest open-source AI challenge. Unlocks automatically on Monday, October 5, 2026 at 07:00 UTC.
+          </p>
+        </div>
+        <div class="card-actions">
+          <span class="btn btn-disabled">🔒 Drops Oct 5</span>
+          <a href="https://github.com/dieennn/hacktoberfest-2026/tree/main/01-week-1" target="_blank" class="btn btn-outline">📂 Workspace</a>
+        </div>
+      </div>
+
+      <!-- Challenge 2: Week 2 -->
+      <div class="card upcoming">
+        <div>
+          <div class="card-header">
+            <div>
+              <div class="card-title">🔬 Week 2 AI Challenge</div>
+              <div class="card-subtitle">Weekly Round 2 • Oct 12 – Oct 19</div>
+            </div>
+            <span class="card-status status-soon">⏳ Oct 12</span>
+          </div>
+          <p class="card-desc" style="margin-top: 10px;">
+            Upcoming Hacktoberfest open-source AI challenge. Unlocks automatically on Monday, October 12, 2026 at 07:00 UTC.
+          </p>
+        </div>
+        <div class="card-actions">
+          <span class="btn btn-disabled">🔒 Drops Oct 12</span>
+          <a href="https://github.com/dieennn/hacktoberfest-2026/tree/main/02-week-2" target="_blank" class="btn btn-outline">📂 Workspace</a>
+        </div>
+      </div>
+
+      <!-- Challenge 3: Week 3 -->
+      <div class="card upcoming">
+        <div>
+          <div class="card-header">
+            <div>
+              <div class="card-title">🤖 Week 3 AI Challenge</div>
+              <div class="card-subtitle">Weekly Round 3 • Oct 19 – Oct 26</div>
+            </div>
+            <span class="card-status status-soon">⏳ Oct 19</span>
+          </div>
+          <p class="card-desc" style="margin-top: 10px;">
+            Upcoming Hacktoberfest open-source AI challenge. Unlocks automatically on Monday, October 19, 2026 at 07:00 UTC.
+          </p>
+        </div>
+        <div class="card-actions">
+          <span class="btn btn-disabled">🔒 Drops Oct 19</span>
+          <a href="https://github.com/dieennn/hacktoberfest-2026/tree/main/03-week-3" target="_blank" class="btn btn-outline">📂 Workspace</a>
+        </div>
+      </div>
+
+      <!-- Challenge 4: Week 4 -->
+      <div class="card upcoming">
+        <div>
+          <div class="card-header">
+            <div>
+              <div class="card-title">🏆 Week 4 AI Challenge</div>
+              <div class="card-subtitle">Final Round • Oct 26 – Nov 1</div>
+            </div>
+            <span class="card-status status-soon">⏳ Oct 26</span>
+          </div>
+          <p class="card-desc" style="margin-top: 10px;">
+            Grand finale open-source AI challenge. Unlocks automatically on Monday, October 26, 2026 at 07:00 UTC.
+          </p>
+        </div>
+        <div class="card-actions">
+          <span class="btn btn-disabled">🔒 Drops Oct 26</span>
+          <a href="https://github.com/dieennn/hacktoberfest-2026/tree/main/04-week-4" target="_blank" class="btn btn-outline">📂 Workspace</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Built with ❤️ for Hacktoberfest 2026 by <a href="https://github.com/dieennn" target="_blank">Dien (@dieennn)</a> • Powered by MLH & DEV, Presented by DigitalOcean</p>
+    </footer>
+  </div>
+</body>
+</html>
