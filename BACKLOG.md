@@ -34,7 +34,9 @@
 - [x] `dev-launch-weekend` — **Launch Weekend Challenge: Build for a Friend**  
   *Project: Allergy & Diet Guard (SafeBite AI) — Local open-source AI food safety scanner.*  
   *Timeline: Oct 2 – Oct 5, 2026 (06:59 UTC)*
-- [ ] `dev-week-1` — Hacktoberfest Open-Source AI Challenge: Week 1 *(Oct 5 – Oct 12)*
+- [x] `dev-week-1` — **Hacktoberfest Open-Source AI Challenge: Week 1**  
+  *Project: TrailFlora & Garden AI — Offline Touch Grass botanical safety & garden planner.*  
+  *Timeline: Oct 5 – Oct 12, 2026*
 - [ ] `dev-week-2` — Hacktoberfest Open-Source AI Challenge: Week 2 *(Oct 12 – Oct 19)*
 - [ ] `dev-week-3` — Hacktoberfest Open-Source AI Challenge: Week 3 *(Oct 19 – Oct 26)*
 - [ ] `dev-week-4` — Hacktoberfest Open-Source AI Challenge: Week 4 *(Oct 26 – Nov 1)*

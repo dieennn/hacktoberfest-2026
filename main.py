@@ -30,6 +30,15 @@ except ImportError:
     weekend_analyzer = None
     ALLERGEN_TAXONOMY, DIETARY_RULES = {}, {}
 
+# Import engine from 01-week-1
+WEEK1_DIR = os.path.join(BASE_DIR, "01-week-1")
+sys.path.insert(0, WEEK1_DIR)
+try:
+    from engine import TrailFloraEngine
+    week1_engine = TrailFloraEngine()
+except ImportError:
+    week1_engine = None
+
 class UnifiedHubHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
@@ -46,10 +55,16 @@ class UnifiedHubHandler(http.server.BaseHTTPRequestHandler):
             self._send_html_file(portal_path)
             return
 
-        # 3. Redirect /weekend to /weekend/
+        # 3. Redirect /weekend to /weekend/ and /week-1 to /week-1/
         if path == "/weekend":
             self.send_response(301)
             self.send_header("Location", "/weekend/")
+            self.end_headers()
+            return
+
+        if path == "/week-1":
+            self.send_response(301)
+            self.send_header("Location", "/week-1/")
             self.end_headers()
             return
 
@@ -84,8 +99,24 @@ class UnifiedHubHandler(http.server.BaseHTTPRequestHandler):
                 self._serve_file(file_path)
                 return
 
-        # 6. Upcoming challenges placeholder
-        for w in ("week-1", "week-2", "week-3", "week-4"):
+        # 6. Week 1 App Static & Health
+        if path == "/week-1/api/health":
+            self._send_json({"status": "healthy", "service": "trail-flora-ai"})
+            return
+
+        if path.startswith("/week-1/"):
+            rel_file = path[len("/week-1/"):]
+            if not rel_file or rel_file == "index.html":
+                file_path = os.path.join(WEEK1_DIR, "static", "index.html")
+            else:
+                file_path = os.path.join(WEEK1_DIR, "static", rel_file)
+
+            if os.path.exists(file_path) and os.path.isfile(file_path):
+                self._serve_file(file_path)
+                return
+
+        # 7. Upcoming challenges placeholder
+        for w in ("week-2", "week-3", "week-4"):
             if path.startswith(f"/{w}"):
                 self._send_json({
                     "challenge": w,
@@ -124,6 +155,40 @@ class UnifiedHubHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"error": str(e)}).encode("utf-8"))
             return
+
+        # Week 1 App API routes
+        if path.startswith("/week-1/api/"):
+            if not week1_engine:
+                self.send_response(500)
+                self.end_headers()
+                return
+
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+            try:
+                payload = json.loads(body)
+            except Exception:
+                payload = {}
+
+            if path == "/week-1/api/plant/scan":
+                res = week1_engine.identify_plant(payload.get("query", ""))
+                self._send_json(res)
+                return
+
+            if path == "/week-1/api/garden/plan":
+                zone = payload.get("zone", "zone_5_6")
+                temp_c = payload.get("temp_c", 10)
+                res = week1_engine.plan_garden(zone, temp_c)
+                self._send_json(res)
+                return
+
+            if path == "/week-1/api/grass/scout":
+                temp_c = payload.get("temp_c", 18)
+                cloud_pct = payload.get("cloud_pct", 20)
+                duration = payload.get("duration_mins", 45)
+                res = week1_engine.scout_outdoor_window(cloud_pct, temp_c, duration)
+                self._send_json(res)
+                return
 
         self.send_response(404)
         self.end_headers()

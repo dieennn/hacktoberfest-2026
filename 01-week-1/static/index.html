@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrailFlora & Garden AI — Touch Grass Outdoor Companion</title>
+  <style>
+    :root {
+      --bg: #0d1610;
+      --card-bg: #142319;
+      --card-border: #233b2a;
+      --accent: #22c55e;
+      --accent-hover: #16a34a;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f0fdf4;
+      --text-muted: #86efac;
+      --text-sub: #9ca3af;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 24px 16px; min-height: 100vh; }
+    .container { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    
+    header { text-align: center; }
+    header h1 { font-size: 2.1rem; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    header p { color: var(--text-sub); font-size: 0.95rem; max-width: 640px; margin: 0 auto; line-height: 1.5; }
+    
+    .badges { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+    .badge { padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+    .badge-theme { background: #15803d; color: #dcfce7; }
+    .badge-gemma { background: #1e3a8a; color: #dbeafe; }
+    .badge-offline { background: #374151; color: #f3f4f6; }
+
+    .tabs { display: flex; gap: 8px; background: #08100a; padding: 6px; border-radius: 10px; border: 1px solid var(--card-border); }
+    .tab-btn { flex: 1; padding: 10px 14px; background: transparent; border: none; color: var(--text-sub); font-size: 0.9rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .tab-btn.active { background: var(--card-bg); color: #fff; border: 1px solid var(--accent); }
+
+    .panel { display: none; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 22px; flex-direction: column; gap: 18px; }
+    .panel.active { display: flex; }
+
+    label { font-size: 0.88rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px; }
+    textarea, select, input[type="number"], input[type="text"] {
+      width: 100%; background: #09120b; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; color: #fff; font-size: 0.92rem; outline: none; transition: 0.2s;
+    }
+    textarea:focus, select:focus, input:focus { border-color: var(--accent); }
+
+    .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .preset-chip { background: #1a2e20; border: 1px solid var(--card-border); color: var(--text); padding: 5px 12px; border-radius: 999px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+    .preset-chip:hover { border-color: var(--accent); background: #22422c; }
+
+    .btn-main { background: var(--accent); color: #052e16; border: none; border-radius: 8px; padding: 12px 20px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
+    .btn-main:hover { background: var(--accent-hover); }
+
+    .result-box { background: #09120b; border: 1px solid var(--card-border); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+    .result-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+    .verdict-tag { font-weight: 700; padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; }
+    .verdict-SAFE_FORAGING { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
+    .verdict-TOXIC_HAZARD { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .verdict-LETHAL_ALERT { background: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid #ef4444; }
+    .verdict-UNKNOWN_CAUTION { background: rgba(156, 163, 175, 0.2); color: #d1d5db; border: 1px solid #9ca3af; }
+
+    .item-card { background: #122016; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; margin-top: 8px; }
+    .item-title { font-weight: 700; color: #fff; font-size: 0.95rem; }
+    .item-sub { font-size: 0.82rem; color: var(--text-sub); margin-top: 3px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    footer { text-align: center; color: var(--text-sub); font-size: 0.85rem; margin-top: 14px; border-top: 1px solid var(--card-border); padding-top: 16px; }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌱 TrailFlora & Garden AI</h1>
+      <p>Your open-source offline botanical sentinel and outdoor garden companion. Built for Hacktoberfest 2026 Week 1 ("Touch Grass").</p>
+      <div class="badges">
+        <span class="badge badge-theme">Theme: Touch Grass</span>
+        <span class="badge badge-gemma">Google Gemma Open-Weight AI</span>
+        <span class="badge badge-offline">100% Offline-Trail Capable</span>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('tab-flora')">🌿 Trail Plant Scanner</button>
+      <button class="tab-btn" onclick="switchTab('tab-garden')">🥕 Backyard Garden & Frost</button>
+      <button class="tab-btn" onclick="switchTab('tab-grass')">☀️ Outdoor Sunlight Scout</button>
+    </div>
+
+    <!-- Panel 1: Trail Plant Scanner -->
+    <div id="tab-flora" class="panel active">
+      <div>
+        <label>Describe plant, leaves, berries, or trail observations:</label>
+        <textarea id="plant-input" rows="3" placeholder="e.g. Climbing vine along the hiking path with clusters of three pointed leaves and a red stem..."></textarea>
+        <div class="presets">
+          <span style="font-size: 0.8rem; color: var(--text-sub); margin-right: 4px;">Trail Presets:</span>
+          <span class="preset-chip" onclick="setPreset('Climbing vine with clusters of three shiny green leaves and red stem')">⚠️ Poison Ivy</span>
+          <span class="preset-chip" onclick="setPreset('Bush with shiny black berries, purple bell flowers, and green calyx star')">☠️ Deadly Nightshade</span>
+          <span class="preset-chip" onclick="setPreset('Square stem herb with sweet peppermint scent growing wild by the stream')">🌿 Wild Mint</span>
+          <span class="preset-chip" onclick="setPreset('Thorny bramble canes with aggregate dark compound berries')">🫐 Wild Blackberry</span>
+        </div>
+      </div>
+      <button class="btn-main" onclick="scanPlant()">🔍 Inspect Trail Plant</button>
+
+      <div id="plant-result" class="result-box" style="display: none;">
+        <div class="result-header">
+          <span style="font-weight: 700; font-size: 1.05rem;" id="plant-title">Trail Safety Assessment</span>
+          <span id="plant-verdict-badge" class="verdict-tag">--</span>
+        </div>
+        <p id="plant-headline" style="font-size: 0.92rem; line-height: 1.4; color: #fff;"></p>
+        <div id="plant-matches-list"></div>
+        <div style="background: #0f1c12; border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 4px;">
+          <strong style="color: var(--accent); font-size: 0.85rem; text-transform: uppercase;">Ranger Advice (Gemma Open AI):</strong>
+          <p id="plant-advice" style="font-size: 0.88rem; color: #e5e7eb; margin-top: 4px;"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Backyard Garden Planner -->
+    <div id="tab-garden" class="panel">
+      <div class="grid-2">
+        <div>
+          <label>USDA Hardiness Region:</label>
+          <select id="garden-zone">
+            <option value="zone_3_4">Cold Northern (Zones 3-4)</option>
+            <option value="zone_5_6" selected>Temperate Mid-Latitude (Zones 5-6)</option>
+            <option value="zone_7_8">Mild Transitional (Zones 7-8)</option>
+            <option value="zone_9_10">Warm Southern (Zones 9-10)</option>
+          </select>
+        </div>
+        <div>
+          <label>Tonight's Expected Low Temp (°C):</label>
+          <input type="number" id="garden-temp" value="5" min="-15" max="35">
+        </div>
+      </div>
+      <button class="btn-main" onclick="planGarden()">🌱 Compute October Planting & Frost Action</button>
+
+      <div id="garden-result" class="result-box" style="display: none;">
+        <div class="result-header">
+          <span id="garden-zone-title" style="font-weight: 700; color: #fff;"></span>
+          <span id="garden-frost-badge" class="verdict-tag verdict-TOXIC_HAZARD">FROST STATUS</span>
+        </div>
+        <p id="garden-alert-text" style="font-size: 0.92rem; color: #fbbf24; font-weight: 600;"></p>
+        <div>
+          <label>Recommended Autumn Outdoor Crops:</label>
+          <div id="garden-crops-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3: Touch Grass Scout -->
+    <div id="tab-grass" class="panel">
+      <div class="grid-2">
+        <div>
+          <label>Current Outdoor Temperature (°C):</label>
+          <input type="number" id="grass-temp" value="18" min="-10" max="40">
+        </div>
+        <div>
+          <label>Cloud Cover (%):</label>
+          <input type="number" id="grass-cloud" value="20" min="0" max="100">
+        </div>
+      </div>
+      <div>
+        <label>Target Trail / Walk Duration (Minutes):</label>
+        <input type="number" id="grass-mins" value="45" min="10" max="240">
+      </div>
+      <button class="btn-main" onclick="scoutGrass()">🌤️ Calculate Outdoor Vitality & Reset</button>
+
+      <div id="grass-result" class="result-box" style="display: none;">
+        <div class="result-header">
+          <span style="font-weight: 700;" id="grass-verdict-title">TOUCH GRASS VERDICT</span>
+          <span id="grass-score-badge" class="verdict-tag verdict-SAFE_FORAGING">Score: 90/100</span>
+        </div>
+        <div id="grass-reasons-list"></div>
+        <p id="grass-quote" style="font-size: 0.9rem; color: var(--text-muted); font-style: italic;"></p>
+      </div>
+    </div>
+
+    <footer>
+      <p>Hacktoberfest 2026 Week 1 Challenge • Built with Python & Google Gemma by <a href="https://github.com/dieennn" target="_blank">@dieennn</a></p>
+    </footer>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function setPreset(txt) {
+      document.getElementById('plant-input').value = txt;
+    }
+
+    async function scanPlant() {
+      const text = document.getElementById('plant-input').value.trim();
+      if (!text) return;
+      try {
+        const resp = await fetch('api/plant/scan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: text })
+        });
+        const data = await resp.json();
+        
+        document.getElementById('plant-result').style.display = 'flex';
+        document.getElementById('plant-headline').innerText = data.headline;
+        document.getElementById('plant-advice').innerText = data.trail_advice;
+        
+        const badge = document.getElementById('plant-verdict-badge');
+        badge.innerText = data.verdict;
+        badge.className = 'verdict-tag verdict-' + data.verdict;
+
+        const list = document.getElementById('plant-matches-list');
+        list.innerHTML = '';
+        if (data.matches && data.matches.length > 0) {
+          data.matches.forEach(m => {
+            const div = document.createElement('div');
+            div.className = 'item-card';
+            div.innerHTML = `
+              <div class="item-title">${m.name} — <span style="color: ${m.toxicity === 'LETHAL' ? '#ef4444' : m.toxicity === 'HIGH' ? '#f59e0b' : '#4ade80'}">${m.toxicity}</span></div>
+              <div class="item-sub"><strong>Hazard:</strong> ${m.danger_type}</div>
+              <div class="item-sub"><strong>Foliage Pattern:</strong> ${m.leaf_pattern}</div>
+              <div class="item-sub"><strong>Edibility:</strong> ${m.edible ? 'Edible (' + m.prep_required + ')' : 'DO NOT CONSUME'}</div>
+            `;
+            list.appendChild(div);
+          });
+        }
+      } catch (err) {
+        alert('Error connecting to plant safety service: ' + err);
+      }
+    }
+
+    async function planGarden() {
+      const zone = document.getElementById('garden-zone').value;
+      const temp = parseFloat(document.getElementById('garden-temp').value) || 10;
+      try {
+        const resp = await fetch('api/garden/plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ zone: zone, temp_c: temp })
+        });
+        const data = await resp.json();
+        
+        document.getElementById('garden-result').style.display = 'flex';
+        document.getElementById('garden-zone-title').innerText = data.zone_label + ' (' + data.fall_frost_window + ')';
+        document.getElementById('garden-alert-text').innerText = data.frost_alert;
+
+        const list = document.getElementById('garden-crops-list');
+        list.innerHTML = '';
+        data.crops.forEach(c => {
+          const div = document.createElement('div');
+          div.className = 'item-card';
+          div.innerHTML = `
+            <div class="item-title">🥬 ${c.crop}</div>
+            <div class="item-sub"><strong>Outdoor Action:</strong> ${c.action}</div>
+            <div class="item-sub"><strong>Est. Cycle:</strong> ~${c.days_to_harvest} days to harvest</div>
+          `;
+          list.appendChild(div);
+        });
+      } catch (err) {
+        alert('Error calculating garden schedule: ' + err);
+      }
+    }
+
+    async function scoutGrass() {
+      const temp = parseFloat(document.getElementById('grass-temp').value) || 18;
+      const cloud = parseFloat(document.getElementById('grass-cloud').value) || 20;
+      const mins = parseInt(document.getElementById('grass-mins').value) || 45;
+      try {
+        const resp = await fetch('api/grass/scout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ temp_c: temp, cloud_pct: cloud, duration_mins: mins })
+        });
+        const data = await resp.json();
+
+        document.getElementById('grass-result').style.display = 'flex';
+        document.getElementById('grass-verdict-title').innerText = data.touch_grass_verdict;
+        document.getElementById('grass-score-badge').innerText = 'Vitality: ' + data.vitality_score + '/100';
+        document.getElementById('grass-quote').innerText = '"' + data.mental_reset_quote + '"';
+
+        const list = document.getElementById('grass-reasons-list');
+        list.innerHTML = '';
+        data.trail_benefits.forEach(b => {
+          const p = document.createElement('p');
+          p.style.fontSize = '0.88rem';
+          p.style.color = '#fff';
+          p.style.marginBottom = '4px';
+          p.innerText = '• ' + b;
+          list.appendChild(p);
+        });
+      } catch (err) {
+        alert('Error scouting outdoor window: ' + err);
+      }
+    }
+  </script>
+</body>
+</html>
