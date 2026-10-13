@@ -11,7 +11,7 @@
 |---|---|---|---|
 | **Launch Weekend** (Oct 2 - Oct 5) | Build for a Friend | [`00-weekend-allergy-guard`](./00-weekend-allergy-guard) | ✅ Completed |
 | **Week 1** (Oct 5 - Oct 12) | Touch Grass | [`01-week-1`](./01-week-1) | ✅ Completed |
-| **Week 2** (Oct 12 - Oct 19) | Announced Oct 12 | [`02-week-2`](./02-week-2) | ⏳ Upcoming |
+| **Week 2** (Oct 12 - Oct 19) | Side Hustle | [`02-week-2`](./02-week-2) | ✅ Completed |
 | **Week 3** (Oct 19 - Oct 26) | Announced Oct 19 | [`03-week-3`](./03-week-3) | ⏳ Upcoming |
 | **Week 4** (Oct 26 - Nov 1) | Announced Oct 26 | [`04-week-4`](./04-week-4) | ⏳ Upcoming |
 
@@ -30,6 +30,12 @@
 - **Problem**: Screen addiction and digital fatigue keep people indoors. When outdoors or gardening, hikers lack reliable offline identification for toxic weeds (poison ivy, deadly nightshade) and autumn frost calendars.
 - **Tech**: Pure Python standard library, offline botanical safety rule matrix, Google Gemma open-weight LLM bridge via Ollama, and high-contrast mobile outdoor UI.
 - **DEV Article**: See [SUBMISSION_DRAFT.md](./01-week-1/SUBMISSION_DRAFT.md).
+
+### [02-week-2](./02-week-2) — HustleLedger AI
+- **Theme**: Side Hustle (Practical tools for freelancers, solopreneurs, and micro-consultants)
+- **Problem**: Subscription fatigue from $30/mo accounting SaaS, fear of leaking private client rates to cloud AI, and unpaid scope-creep/overdue invoices.
+- **Tech**: Pure Python standard library, Schedule C tax deduction heuristics, Google Gemma open-weight LLM negotiation assistant, and instant offline invoice compiler.
+- **DEV Article**: See [SUBMISSION_DRAFT.md](./02-week-2/SUBMISSION_DRAFT.md).
 
 ---
 

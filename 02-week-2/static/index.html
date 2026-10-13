@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HustleLedger AI — Local Financial Sentinel for Side Hustlers</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f9fafb;
+      --text-sub: #9ca3af;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 24px 16px; min-height: 100vh; }
+    .container { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+
+    header { text-align: center; }
+    header h1 { font-size: 2.1rem; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    header p { color: var(--text-sub); font-size: 0.95rem; max-width: 680px; margin: 0 auto; line-height: 1.5; }
+
+    .badges { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+    .badge { padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+    .badge-theme { background: #1e3a8a; color: #dbeafe; }
+    .badge-gemma { background: #065f46; color: #a7f3d0; }
+    .badge-offline { background: #374151; color: #f3f4f6; }
+
+    .tabs { display: flex; gap: 8px; background: #0b0f19; padding: 6px; border-radius: 10px; border: 1px solid var(--card-border); }
+    .tab-btn { flex: 1; padding: 10px 14px; background: transparent; border: none; color: var(--text-sub); font-size: 0.9rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .tab-btn.active { background: var(--card-bg); color: #fff; border: 1px solid var(--accent); }
+
+    .panel { display: none; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 22px; flex-direction: column; gap: 18px; }
+    .panel.active { display: flex; }
+
+    label { font-size: 0.88rem; font-weight: 600; color: #d1d5db; display: block; margin-bottom: 6px; }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%; background: #0b0f19; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; color: #fff; font-size: 0.92rem; outline: none; transition: 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+
+    .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .preset-chip { background: #1f2937; border: 1px solid #374151; color: var(--text); padding: 5px 12px; border-radius: 999px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+    .preset-chip:hover { border-color: var(--accent); background: #2563eb; }
+
+    .btn-main { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 12px 20px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
+    .btn-main:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #1f2937; color: #fff; border: 1px solid var(--card-border); border-radius: 8px; padding: 8px 14px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .btn-secondary:hover { background: #374151; }
+
+    .result-box { background: #0b0f19; border: 1px solid var(--card-border); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    .metric-card { background: #111827; border: 1px solid var(--card-border); border-radius: 8px; padding: 14px; }
+    .metric-val { font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .metric-lbl { font-size: 0.8rem; color: var(--text-sub); margin-top: 4px; }
+
+    .item-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .item-del { background: #ef4444; color: #fff; border: none; border-radius: 6px; padding: 10px 12px; cursor: pointer; }
+
+    footer { text-align: center; color: var(--text-sub); font-size: 0.85rem; margin-top: 14px; border-top: 1px solid var(--card-border); padding-top: 16px; }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>💼 HustleLedger AI</h1>
+      <p>Local-first financial sentinel, tax-deductible expense categorizer, and client communication defender for side hustlers. Zero cloud tracking.</p>
+      <div class="badges">
+        <span class="badge badge-theme">Theme: Side Hustle</span>
+        <span class="badge badge-gemma">Google Gemma Open AI Bridge</span>
+        <span class="badge badge-offline">100% Client Data Privacy</span>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('tab-expense')">🧾 Expense & Tax Shield</button>
+      <button class="tab-btn" onclick="switchTab('tab-invoice')">📄 Invoice Builder</button>
+      <button class="tab-btn" onclick="switchTab('tab-comms')">🛡️ Scope & Overdue Defender</button>
+    </div>
+
+    <!-- Panel 1: Expense & Tax Shield -->
+    <div id="tab-expense" class="panel active">
+      <div class="grid-2">
+        <div>
+          <label>Expense Description / Receipt:</label>
+          <input type="text" id="exp-desc" placeholder="e.g. Render Cloud Web Service monthly plan">
+        </div>
+        <div>
+          <label>Amount Spent ($ USD):</label>
+          <input type="number" id="exp-amt" value="25.00" step="0.5" min="0">
+        </div>
+      </div>
+      <div>
+        <label>Common Hustle Presets:</label>
+        <div class="presets">
+          <span class="preset-chip" onclick="setExpPreset('Render cloud hosting for client API', 20)">☁️ Render Cloud Hosting ($20)</span>
+          <span class="preset-chip" onclick="setExpPreset('Ergonomic coding mechanical keyboard', 120)">⌨️ Dev Hardware ($120)</span>
+          <span class="preset-chip" onclick="setExpPreset('Starbucks coffee meeting with freelance client', 16)">☕ Client Meeting ($16)</span>
+          <span class="preset-chip" onclick="setExpPreset('Home high-speed internet business fiber', 70)">🌐 Business Internet ($70)</span>
+          <span class="preset-chip" onclick="setExpPreset('Udemy fullstack React and Python course', 45)">📚 Skill Education ($45)</span>
+        </div>
+      </div>
+      <button class="btn-main" onclick="classifyExpense()">🔍 Classify Tax Category & Calculate Write-off</button>
+
+      <div id="exp-result" class="result-box" style="display: none;">
+        <div class="grid-3">
+          <div class="metric-card">
+            <div class="metric-val" id="res-cat" style="font-size: 1.05rem; color: #60a5fa;">--</div>
+            <div class="metric-lbl">Tax Schedule Category</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" id="res-deduct" style="color: #34d399;">--</div>
+            <div class="metric-lbl">Deductible Write-Off (100%)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" id="res-taxsave" style="color: #fbbf24;">--</div>
+            <div class="metric-lbl">Est. Cash Kept in Pocket</div>
+          </div>
+        </div>
+        <div style="background: #111827; border-left: 3px solid var(--accent); padding: 12px 14px; border-radius: 4px;">
+          <strong style="color: var(--accent); font-size: 0.85rem; text-transform: uppercase;">Tax Rule & Audit Defense:</strong>
+          <p id="res-note" style="font-size: 0.9rem; color: #e5e7eb; margin-top: 4px;"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Invoice Builder -->
+    <div id="tab-invoice" class="panel">
+      <div class="grid-2">
+        <div>
+          <label>Client Name / Organization:</label>
+          <input type="text" id="inv-client" value="Apex Digital Studio">
+        </div>
+        <div>
+          <label>Project / Milestone Title:</label>
+          <input type="text" id="inv-project" value="Landing Page & Backend Gateway Setup">
+        </div>
+      </div>
+
+      <div>
+        <label>Invoice Line Items:</label>
+        <div id="items-container">
+          <div class="item-row">
+            <input type="text" class="item-name" value="API Gateway Architecture & Deployment" placeholder="Description">
+            <input type="number" class="item-qty" value="1" min="1" placeholder="Qty">
+            <input type="number" class="item-rate" value="500" min="0" placeholder="Rate ($)">
+            <button class="item-del" onclick="delRow(this)">✕</button>
+          </div>
+          <div class="item-row">
+            <input type="text" class="item-name" value="High-Converting Responsive Mobile UI" placeholder="Description">
+            <input type="number" class="item-qty" value="1" min="1" placeholder="Qty">
+            <input type="number" class="item-rate" value="350" min="0" placeholder="Rate ($)">
+            <button class="item-del" onclick="delRow(this)">✕</button>
+          </div>
+        </div>
+        <button class="btn-secondary" onclick="addRow()" style="margin-top: 6px;">+ Add Line Item</button>
+      </div>
+
+      <button class="btn-main" onclick="compileInvoice()">📄 Compile Verified Invoice</button>
+
+      <div id="inv-result" class="result-box" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 10px;">
+          <div>
+            <h3 id="inv-out-title" style="color: #fff;"></h3>
+            <p id="inv-out-client" style="color: var(--text-sub); font-size: 0.88rem;"></p>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.5rem; font-weight: 700; color: #34d399;" id="inv-out-total">$0.00</div>
+            <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.75rem; padding: 2px 8px; border-radius: 999px;">Net 14 Due</span>
+          </div>
+        </div>
+        <div id="inv-out-lines"></div>
+      </div>
+    </div>
+
+    <!-- Panel 3: Scope & Overdue Defender -->
+    <div id="tab-comms" class="panel">
+      <div class="grid-2">
+        <div>
+          <label>Situation Type:</label>
+          <select id="comm-type">
+            <option value="overdue_reminder">🚨 Overdue Invoice Reminder</option>
+            <option value="scope_creep">🛑 Scope-Creep Boundary Defense (Extra work unpaid)</option>
+          </select>
+        </div>
+        <div>
+          <label>Client Name:</label>
+          <input type="text" id="comm-client" value="Sarah Jenkins">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label>Invoice / Project Value ($ USD):</label>
+          <input type="number" id="comm-amount" value="850">
+        </div>
+        <div>
+          <label>Specific Context / Task Mention:</label>
+          <input type="text" id="comm-context" placeholder="e.g. Invoice INV-104 overdue 8 days OR Added 3 extra dashboard pages">
+        </div>
+      </div>
+      <button class="btn-main" onclick="draftComm()">🛡️ Generate Diplomatic Response (Google Gemma AI)</button>
+
+      <div id="comm-result" class="result-box" style="display: none;">
+        <label>Polished Negotiation Draft:</label>
+        <textarea id="comm-draft-output" rows="5" style="font-size: 0.95rem; line-height: 1.5; color: #fff;"></textarea>
+        <button class="btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('comm-draft-output').value); alert('Copied to clipboard!');">📋 Copy to Clipboard</button>
+      </div>
+    </div>
+
+    <footer>
+      <p>Hacktoberfest 2026 Week 2 Challenge • Built with Python & Google Gemma by <a href="https://github.com/dieennn" target="_blank">@dieennn</a></p>
+    </footer>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function setExpPreset(desc, amt) {
+      document.getElementById('exp-desc').value = desc;
+      document.getElementById('exp-amt').value = amt;
+    }
+
+    async function classifyExpense() {
+      const desc = document.getElementById('exp-desc').value.trim();
+      const amt = parseFloat(document.getElementById('exp-amt').value) || 0;
+      if (!desc) return;
+
+      try {
+        const resp = await fetch('api/expense/categorize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ description: desc, amount: amt })
+        });
+        const data = await resp.json();
+        document.getElementById('exp-result').style.display = 'flex';
+        document.getElementById('res-cat').innerText = data.category_label;
+        document.getElementById('res-deduct').innerText = '$' + data.deductible_amount.toFixed(2) + ` (${data.deductible_pct}%)`;
+        document.getElementById('res-taxsave').innerText = '+$' + data.estimated_tax_savings.toFixed(2);
+        document.getElementById('res-note').innerText = data.tax_note;
+      } catch (err) {
+        alert('Error classifying expense: ' + err);
+      }
+    }
+
+    function addRow() {
+      const container = document.getElementById('items-container');
+      const div = document.createElement('div');
+      div.className = 'item-row';
+      div.innerHTML = `
+        <input type="text" class="item-name" placeholder="Description">
+        <input type="number" class="item-qty" value="1" min="1" placeholder="Qty">
+        <input type="number" class="item-rate" value="100" min="0" placeholder="Rate ($)">
+        <button class="item-del" onclick="delRow(this)">✕</button>
+      `;
+      container.appendChild(div);
+    }
+
+    function delRow(btn) {
+      btn.parentElement.remove();
+    }
+
+    async function compileInvoice() {
+      const client = document.getElementById('inv-client').value.trim();
+      const project = document.getElementById('inv-project').value.trim();
+      const rows = document.querySelectorAll('#items-container .item-row');
+      const items = [];
+
+      rows.forEach(r => {
+        const name = r.querySelector('.item-name').value.trim();
+        const qty = parseFloat(r.querySelector('.item-qty').value) || 1;
+        const rate = parseFloat(r.querySelector('.item-rate').value) || 0;
+        if (name) {
+          items.push({ name, qty, rate });
+        }
+      });
+
+      try {
+        const resp = await fetch('api/invoice/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ client, project, items })
+        });
+        const data = await resp.json();
+        document.getElementById('inv-result').style.display = 'flex';
+        document.getElementById('inv-out-title').innerText = data.project_title;
+        document.getElementById('inv-out-client').innerText = 'Billed to: ' + data.client_name;
+        document.getElementById('inv-out-total').innerText = '$' + data.total_due.toFixed(2);
+
+        const linesDiv = document.getElementById('inv-out-lines');
+        linesDiv.innerHTML = '';
+        data.items.forEach(it => {
+          const row = document.createElement('div');
+          row.style.display = 'flex';
+          row.style.justifyContent = 'space-between';
+          row.style.padding = '8px 0';
+          row.style.borderBottom = '1px solid #1f2937';
+          row.innerHTML = `<span>${it.name} (x${it.qty})</span><strong>$${it.total.toFixed(2)}</strong>`;
+          linesDiv.appendChild(row);
+        });
+      } catch (err) {
+        alert('Error generating invoice: ' + err);
+      }
+    }
+
+    async function draftComm() {
+      const type = document.getElementById('comm-type').value;
+      const client = document.getElementById('comm-client').value.trim();
+      const amount = parseFloat(document.getElementById('comm-amount').value) || 0;
+      const context = document.getElementById('comm-context').value.trim();
+
+      try {
+        const resp = await fetch('api/comms/draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comm_type: type, client_name: client, amount: amount, context: context })
+        });
+        const data = await resp.json();
+        document.getElementById('comm-result').style.display = 'flex';
+        document.getElementById('comm-draft-output').value = data.draft;
+      } catch (err) {
+        alert('Error drafting communication: ' + err);
+      }
+    }
+  </script>
+</body>
+</html>

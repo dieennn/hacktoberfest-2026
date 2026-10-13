@@ -37,21 +37,24 @@
 - [x] `dev-week-1` — **Hacktoberfest Open-Source AI Challenge: Week 1**  
   *Project: TrailFlora & Garden AI — Offline Touch Grass botanical safety & garden planner.*  
   *Timeline: Oct 5 – Oct 12, 2026*
-- [ ] `dev-week-2` — Hacktoberfest Open-Source AI Challenge: Week 2 *(Oct 12 – Oct 19)*
+- [x] `dev-week-2` — **Hacktoberfest Open-Source AI Challenge: Week 2**  
+  *Project: HustleLedger AI — Privacy-First Financial Sentinel & Scope Defender for Side Hustlers.*  
+  *Timeline: Oct 12 – Oct 19, 2026*
 - [ ] `dev-week-3` — Hacktoberfest Open-Source AI Challenge: Week 3 *(Oct 19 – Oct 26)*
 - [ ] `dev-week-4` — Hacktoberfest Open-Source AI Challenge: Week 4 *(Oct 26 – Nov 1)*
 
 ### 4. Global Hack Week: Hacktoberfest (Oct 9 – Oct 15, 2026)
 - [ ] `ghw` — Complete GHW Hacktoberfest Registration & Onboarding challenges.
-- [ ] `ghw-livestream` — Attend and check into a GHW: Hacktoberfest technical workshop.
-- [ ] `ghw-points-15` — Accumulate 15 experience points on the GHW Challenge Dashboard.
-- [ ] `ghw-points-30` — Accumulate 30 experience points on the GHW Challenge Dashboard.
-- [ ] `ghw-points-75` — Accumulate 75 experience points on the GHW Challenge Dashboard.
+- [x] `ghw-livestream` — Attend and check into a GHW: Hacktoberfest technical workshop.
+- [x] `ghw-opening` — Celebrate Crashtoberfest during GHW Opening Ceremony (Secret Sticker).
+- [ ] `ghw-points-15` — Accumulate 10 experience points on the GHW Challenge Dashboard.
+- [ ] `ghw-points-30` — Accumulate 20 experience points on the GHW Challenge Dashboard.
+- [ ] `ghw-points-75` — Accumulate 30 experience points on the GHW Challenge Dashboard.
 
 ### 5. Technical Livestreams & Workshops
-- [ ] `livestreams-1` — Check into 1 technical livestream session.
-- [ ] `livestreams-3` — Check into 3 technical livestream sessions.
-- [ ] `livestreams-5` — Check into 5 technical livestream sessions.
+- [x] `livestreams-1` — Check into 1 technical livestream session.
+- [x] `livestreams-3` — Check into 3 technical livestream sessions.
+- [x] `livestreams-5` — Check into 5 technical livestream sessions.
 - [ ] `livestream-launch` — Check into Hacktoberfest Launch Livestream.
 
 ### 6. Participant Surveys & Feedback
