@@ -12,7 +12,7 @@
 | **Launch Weekend** (Oct 2 - Oct 5) | Build for a Friend | [`00-weekend-allergy-guard`](./00-weekend-allergy-guard) | ✅ Completed |
 | **Week 1** (Oct 5 - Oct 12) | Touch Grass | [`01-week-1`](./01-week-1) | ✅ Completed |
 | **Week 2** (Oct 12 - Oct 19) | Side Hustle | [`02-week-2`](./02-week-2) | ✅ Completed |
-| **Week 3** (Oct 19 - Oct 26) | Announced Oct 19 | [`03-week-3`](./03-week-3) | ⏳ Upcoming |
+| **Week 3** (Oct 19 - Oct 26) | Slow and Steady | [`03-week-3`](./03-week-3) | ✅ Completed |
 | **Week 4** (Oct 26 - Nov 1) | Announced Oct 26 | [`04-week-4`](./04-week-4) | ⏳ Upcoming |
 
 ---
@@ -36,6 +36,12 @@
 - **Problem**: Subscription fatigue from $30/mo accounting SaaS, fear of leaking private client rates to cloud AI, and unpaid scope-creep/overdue invoices.
 - **Tech**: Pure Python standard library, Schedule C tax deduction heuristics, Google Gemma open-weight LLM negotiation assistant, and instant offline invoice compiler.
 - **DEV Article**: See [SUBMISSION_DRAFT.md](./02-week-2/SUBMISSION_DRAFT.md).
+
+### [03-week-3](./03-week-3) — SlothDigest AI
+- **Theme**: Slow and Steady (International Sloth Day — AI that rewards laziness)
+- **Problem**: Developers drowning in chaotic 500-message chat threads, decision burnout, and procrastinated dreadful tasks.
+- **Tech**: Pure Python standard library, noise stripping heuristics, Google Gemma open-weight LLM 2-line distiller, offline Web Audio brown noise synthesizer, and 2-minute task shrinker.
+- **DEV Article**: See [SUBMISSION_DRAFT.md](./03-week-3/SUBMISSION_DRAFT.md).
 
 ---
 

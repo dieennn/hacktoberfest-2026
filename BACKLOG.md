@@ -40,7 +40,9 @@
 - [x] `dev-week-2` — **Hacktoberfest Open-Source AI Challenge: Week 2**  
   *Project: HustleLedger AI — Privacy-First Financial Sentinel & Scope Defender for Side Hustlers.*  
   *Timeline: Oct 12 – Oct 19, 2026*
-- [ ] `dev-week-3` — Hacktoberfest Open-Source AI Challenge: Week 3 *(Oct 19 – Oct 26)*
+- [x] `dev-week-3` — **Hacktoberfest Open-Source AI Challenge: Week 3**  
+  *Project: SlothDigest AI — Slow and Steady Lazy Triage & Ambient Wind-Down.*  
+  *Timeline: Oct 19 – Oct 26, 2026*
 - [ ] `dev-week-4` — Hacktoberfest Open-Source AI Challenge: Week 4 *(Oct 26 – Nov 1)*
 
 ### 4. Global Hack Week: Hacktoberfest (Oct 9 – Oct 15, 2026)

@@ -48,6 +48,15 @@ try:
 except ImportError:
     week2_engine = None
 
+# Import engine from 03-week-3
+WEEK3_DIR = os.path.join(BASE_DIR, "03-week-3")
+sys.path.insert(0, WEEK3_DIR)
+try:
+    from sloth_engine import SlothDigestEngine
+    week3_engine = SlothDigestEngine()
+except ImportError:
+    week3_engine = None
+
 class UnifiedHubHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
@@ -80,6 +89,12 @@ class UnifiedHubHandler(http.server.BaseHTTPRequestHandler):
         if path == "/week-2":
             self.send_response(301)
             self.send_header("Location", "/week-2/")
+            self.end_headers()
+            return
+
+        if path == "/week-3":
+            self.send_response(301)
+            self.send_header("Location", "/week-3/")
             self.end_headers()
             return
 
@@ -146,8 +161,24 @@ class UnifiedHubHandler(http.server.BaseHTTPRequestHandler):
                 self._serve_file(file_path)
                 return
 
-        # 8. Upcoming challenges placeholder
-        for w in ("week-3", "week-4"):
+        # 8. Week 3 App Static & Health
+        if path == "/week-3/api/health":
+            self._send_json({"status": "healthy", "service": "sloth-digest-ai"})
+            return
+
+        if path.startswith("/week-3/"):
+            rel_file = path[len("/week-3/"):]
+            if not rel_file or rel_file == "index.html":
+                file_path = os.path.join(WEEK3_DIR, "static", "index.html")
+            else:
+                file_path = os.path.join(WEEK3_DIR, "static", rel_file)
+
+            if os.path.exists(file_path) and os.path.isfile(file_path):
+                self._serve_file(file_path)
+                return
+
+        # 9. Upcoming challenges placeholder
+        for w in ("week-4",):
             if path.startswith(f"/{w}"):
                 self._send_json({
                     "challenge": w,
@@ -257,6 +288,40 @@ class UnifiedHubHandler(http.server.BaseHTTPRequestHandler):
                 ctx = payload.get("context", "")
                 draft = week2_engine.draft_client_communication(comm_type, client, amt, ctx)
                 self._send_json({"draft": draft})
+                return
+
+        # Week 3 App API routes
+        if path.startswith("/week-3/api/"):
+            if not week3_engine:
+                self.send_response(500)
+                self.end_headers()
+                return
+
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+            try:
+                payload = json.loads(body)
+            except Exception:
+                payload = {}
+
+            if path == "/week-3/api/triage/distill":
+                text = payload.get("text", "")
+                alias = payload.get("user_alias", "me")
+                res = week3_engine.distill_thread(text, alias)
+                self._send_json(res)
+                return
+
+            if path == "/week-3/api/winddown/plan":
+                ftype = payload.get("fatigue_type", "screen_eye_strain")
+                mins = payload.get("minutes", 20)
+                res = week3_engine.generate_wind_down(mins, ftype)
+                self._send_json(res)
+                return
+
+            if path == "/week-3/api/task/simplify":
+                task = payload.get("task", "")
+                res = week3_engine.simplify_task(task)
+                self._send_json(res)
                 return
 
         self.send_response(404)

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SlothDigest AI — Slow and Steady Lazy Companion</title>
+  <style>
+    :root {
+      --bg: #10120e;
+      --card-bg: #181c15;
+      --card-border: #283022;
+      --accent: #84cc16;
+      --accent-hover: #65a30d;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f4f6f0;
+      --text-sub: #a1a89c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 24px 16px; min-height: 100vh; }
+    .container { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+
+    header { text-align: center; }
+    header h1 { font-size: 2.1rem; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    header p { color: var(--text-sub); font-size: 0.95rem; max-width: 680px; margin: 0 auto; line-height: 1.5; }
+
+    .badges { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+    .badge { padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+    .badge-theme { background: #365314; color: #ecfccb; }
+    .badge-sloth { background: #713f12; color: #fef08a; }
+    .badge-offline { background: #27272a; color: #f4f4f5; }
+
+    .tabs { display: flex; gap: 8px; background: #0c0e0b; padding: 6px; border-radius: 10px; border: 1px solid var(--card-border); }
+    .tab-btn { flex: 1; padding: 10px 14px; background: transparent; border: none; color: var(--text-sub); font-size: 0.9rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .tab-btn.active { background: var(--card-bg); color: #fff; border: 1px solid var(--accent); }
+
+    .panel { display: none; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 22px; flex-direction: column; gap: 18px; }
+    .panel.active { display: flex; }
+
+    label { font-size: 0.88rem; font-weight: 600; color: #d9dfd3; display: block; margin-bottom: 6px; }
+    textarea, select, input[type="text"], input[type="number"] {
+      width: 100%; background: #0d100c; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; color: #fff; font-size: 0.92rem; outline: none; transition: 0.2s;
+    }
+    textarea:focus, select:focus, input:focus { border-color: var(--accent); }
+
+    .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .preset-chip { background: #20261c; border: 1px solid var(--card-border); color: var(--text); padding: 5px 12px; border-radius: 999px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+    .preset-chip:hover { border-color: var(--accent); background: #2b3525; }
+
+    .btn-main { background: var(--accent); color: #1a2e05; border: none; border-radius: 8px; padding: 12px 20px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
+    .btn-main:hover { background: var(--accent-hover); }
+
+    .result-box { background: #0c0e0b; border: 1px solid var(--card-border); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    .metric-card { background: #181c15; border: 1px solid var(--card-border); border-radius: 8px; padding: 14px; text-align: center; }
+    .metric-val { font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .metric-lbl { font-size: 0.8rem; color: var(--text-sub); margin-top: 4px; }
+
+    .item-card { background: #181c15; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; margin-top: 6px; }
+
+    footer { text-align: center; color: var(--text-sub); font-size: 0.85rem; margin-top: 14px; border-top: 1px solid var(--card-border); padding-top: 16px; }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🦥 SlothDigest AI</h1>
+      <p>Zero-effort intelligence for International Sloth Day. Automate chat clutter, distill dread, and relax without doomscrolling.</p>
+      <div class="badges">
+        <span class="badge badge-theme">Theme: Slow and Steady</span>
+        <span class="badge badge-sloth">International Sloth Day</span>
+        <span class="badge badge-offline">100% Offline Capable</span>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('tab-triage')">💬 Chat & Thread Distiller</button>
+      <button class="tab-btn" onclick="switchTab('tab-winddown')">🌙 Sloth Mode & Ambient Audio</button>
+      <button class="tab-btn" onclick="switchTab('tab-starter')">⚡ 2-Minute Task Shrinker</button>
+    </div>
+
+    <!-- Panel 1: Chat Distiller -->
+    <div id="tab-triage" class="panel active">
+      <div>
+        <label>Paste Overwhelming Chat / Slack / Email Thread:</label>
+        <textarea id="triage-input" rows="5" placeholder="Alice: Good morning! Anyone seen the report?\nBob: Not yet, lol\nCharlie: @me please deploy the hotfix before 4 PM today!"></textarea>
+        <div class="presets">
+          <span style="font-size: 0.8rem; color: var(--text-sub); margin-right: 4px;">Lazy Presets:</span>
+          <span class="preset-chip" onclick="setTriagePreset(1)">🔥 Chaotic Dev Ops Thread</span>
+          <span class="preset-chip" onclick="setTriagePreset(2)">😴 Endless Meeting Banter</span>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label>Your Name / Alias in thread:</label>
+          <input type="text" id="triage-alias" value="me">
+        </div>
+        <div style="display: flex; align-items: flex-end;">
+          <button class="btn-main" style="width: 100%;" onclick="distillThread()">🦥 Distill & Save Reading Effort</button>
+        </div>
+      </div>
+
+      <div id="triage-result" class="result-box" style="display: none;">
+        <div class="grid-3">
+          <div class="metric-card">
+            <div class="metric-val" id="res-effort" style="color: #a3e635;">90%</div>
+            <div class="metric-lbl">Effort Saved</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" id="res-mins" style="color: #60a5fa;">3.5m</div>
+            <div class="metric-lbl">Reading Time Spared</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" id="res-verdict" style="font-size: 0.95rem; color: #fbbf24;">2 ACTIONS</div>
+            <div class="metric-lbl">Sloth Verdict</div>
+          </div>
+        </div>
+
+        <div style="background: #141811; border-left: 3px solid var(--accent); padding: 12px 14px; border-radius: 4px;">
+          <strong style="color: var(--accent); font-size: 0.85rem; text-transform: uppercase;">2-Line Sloth Summary (Gemma AI):</strong>
+          <p id="res-summary" style="font-size: 0.92rem; color: #f4f6f0; margin-top: 4px; line-height: 1.4;"></p>
+        </div>
+
+        <div>
+          <label>Crucial Action Items for You:</label>
+          <div id="res-actions-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Sloth Mode Wind-Down -->
+    <div id="tab-winddown" class="panel">
+      <div class="grid-2">
+        <div>
+          <label>Burnout / Fatigue Type:</label>
+          <select id="winddown-type">
+            <option value="screen_eye_strain" selected>Digital Screen Burnout & Eye Strain</option>
+            <option value="mental_overload">Cognitive Code Overload & Decision Fatigue</option>
+          </select>
+        </div>
+        <div>
+          <label>Relaxation Target (Minutes):</label>
+          <input type="number" id="winddown-mins" value="20" min="5" max="60">
+        </div>
+      </div>
+      <button class="btn-main" onclick="planWindDown()">🌿 Prescribe Sloth Decompression Routine</button>
+
+      <div id="winddown-result" class="result-box" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 10px;">
+          <div>
+            <h3 id="wd-title" style="color: #fff;"></h3>
+            <p id="wd-sound" style="color: var(--accent); font-size: 0.88rem; margin-top: 2px;"></p>
+          </div>
+          <button id="audio-toggle-btn" class="btn-main" style="padding: 8px 14px; font-size: 0.85rem;" onclick="toggleAmbientNoise()">▶️ Play Offline Brown Noise</button>
+        </div>
+        <div id="wd-steps-list"></div>
+        <p id="wd-mantra" style="font-size: 0.88rem; color: var(--text-sub); font-style: italic; text-align: center; margin-top: 6px;"></p>
+      </div>
+    </div>
+
+    <!-- Panel 3: 2-Minute Task Shrinker -->
+    <div id="tab-starter" class="panel">
+      <div>
+        <label>Task You Have Been Dreadfully Procrastinating:</label>
+        <input type="text" id="task-input" placeholder="e.g. Refactor 2,000 lines of chaotic auth middleware or sort messy tax receipts">
+        <div class="presets">
+          <span class="preset-chip" onclick="document.getElementById('task-input').value='Sort and clean up 600 unorganized files in Downloads folder'">📁 Clean Downloads Folder</span>
+          <span class="preset-chip" onclick="document.getElementById('task-input').value='Draft long-overdue project milestone documentation'">📝 Write Project Docs</span>
+          <span class="preset-chip" onclick="document.getElementById('task-input').value='Audit bank statements and log quarterly business expenses'">💰 Log Expense Receipts</span>
+        </div>
+      </div>
+      <button class="btn-main" onclick="shrinkTask()">⚡ Shrink into 2-Minute Starter</button>
+
+      <div id="task-result" class="result-box" style="display: none;">
+        <div style="background: #141811; border-left: 3px solid #60a5fa; padding: 12px 14px; border-radius: 4px;">
+          <strong style="color: #60a5fa; font-size: 0.85rem; text-transform: uppercase;">Ridiculously Easy 2-Minute Starter Step:</strong>
+          <p id="task-starter-text" style="font-size: 1.05rem; font-weight: 600; color: #fff; margin-top: 6px; line-height: 1.4;"></p>
+        </div>
+        <p id="task-rule" style="font-size: 0.88rem; color: var(--text-sub);"></p>
+      </div>
+    </div>
+
+    <footer>
+      <p>Hacktoberfest 2026 Week 3 Challenge • International Sloth Day • Built by <a href="https://github.com/dieennn" target="_blank">@dieennn</a></p>
+    </footer>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function setTriagePreset(type) {
+      if (type === 1) {
+        document.getElementById('triage-input').value = `Alice: Pagi tim! Ada blocker hari ini?\nBob: Aman, lagi ngopi.\nCharlie: haha lol santai dulu\nDavid: @me URGENT: API production throw 500 error on payment gateway, tolong review fix PR #104 ASAP!\nEve: Sip siap\nDavid: Also check database connection pool setting.`;
+      } else {
+        document.getElementById('triage-input').value = `Sam: Halo guys meeting jam berapa ya?\nTaylor: Jam 2 siang kalau ga salah\nSam: Ok noted thanks!\nAlex: Siap meluncur mantap\nJordan: Jangan lupa bawa catatan kemarin ya.`;
+      }
+    }
+
+    async function distillThread() {
+      const text = document.getElementById('triage-input').value.trim();
+      const alias = document.getElementById('triage-alias').value.trim() || 'me';
+      if (!text) return;
+
+      try {
+        const resp = await fetch('api/triage/distill', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, user_alias: alias })
+        });
+        const data = await resp.json();
+
+        document.getElementById('triage-result').style.display = 'flex';
+        document.getElementById('res-effort').innerText = data.laziness_score_pct + '%';
+        document.getElementById('res-mins').innerText = data.reading_time_saved_minutes + 'm';
+        document.getElementById('res-verdict').innerText = data.sloth_verdict;
+        document.getElementById('res-summary').innerText = data.two_line_summary;
+
+        const list = document.getElementById('res-actions-list');
+        list.innerHTML = '';
+        if (data.action_items && data.action_items.length > 0) {
+          data.action_items.forEach(act => {
+            const div = document.createElement('div');
+            div.className = 'item-card';
+            div.innerHTML = `<strong>⚡ Action:</strong> <span style="color: #fff;">${act}</span>`;
+            list.appendChild(div);
+          });
+        } else {
+          list.innerHTML = '<p style="font-size: 0.88rem; color: #a3e635;">No urgent action items for you. Go back to chilling.</p>';
+        }
+      } catch (err) {
+        alert('Error communicating with Sloth triage service: ' + err);
+      }
+    }
+
+    async function planWindDown() {
+      const ftype = document.getElementById('winddown-type').value;
+      const mins = parseInt(document.getElementById('winddown-mins').value) || 20;
+
+      try {
+        const resp = await fetch('api/winddown/plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fatigue_type: ftype, minutes: mins })
+        });
+        const data = await resp.json();
+
+        document.getElementById('winddown-result').style.display = 'flex';
+        document.getElementById('wd-title').innerText = data.fatigue_category;
+        document.getElementById('wd-sound').innerText = '🎧 Suggested Tone: ' + data.recommended_soundscape;
+        document.getElementById('wd-mantra').innerText = `"${data.sloth_mantra}"`;
+
+        const list = document.getElementById('wd-steps-list');
+        list.innerHTML = '';
+        data.sloth_steps.forEach((st, i) => {
+          const div = document.createElement('div');
+          div.className = 'item-card';
+          div.innerHTML = `<strong>Step ${i+1}:</strong> ${st}`;
+          list.appendChild(div);
+        });
+      } catch (err) {
+        alert('Error planning wind-down: ' + err);
+      }
+    }
+
+    async function shrinkTask() {
+      const task = document.getElementById('task-input').value.trim();
+      if (!task) return;
+
+      try {
+        const resp = await fetch('api/task/simplify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ task })
+        });
+        const data = await resp.json();
+
+        document.getElementById('task-result').style.display = 'flex';
+        document.getElementById('task-starter-text').innerText = data.two_minute_starter;
+        document.getElementById('task-rule').innerText = data.sloth_rule;
+      } catch (err) {
+        alert('Error simplifying task: ' + err);
+      }
+    }
+
+    // Web Audio Synthesizer for 100% offline soothing Brown Noise
+    let audioCtx = null;
+    let noiseNode = null;
+    let isPlaying = false;
+
+    function toggleAmbientNoise() {
+      const btn = document.getElementById('audio-toggle-btn');
+      if (isPlaying) {
+        if (noiseNode) { noiseNode.stop(); noiseNode.disconnect(); noiseNode = null; }
+        isPlaying = false;
+        btn.innerText = '▶️ Play Offline Brown Noise';
+      } else {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const bufferSize = audioCtx.sampleRate * 2;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          let lastOut = 0.0;
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            data[i] = (lastOut + (0.02 * white)) / 1.02;
+            lastOut = data[i];
+            data[i] *= 3.5; // Gain adjustment
+          }
+          noiseNode = audioCtx.createBufferSource();
+          noiseNode.buffer = buffer;
+          noiseNode.loop = true;
+          const gainNode = audioCtx.createGain();
+          gainNode.gain.value = 0.15;
+          noiseNode.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          noiseNode.start();
+          isPlaying = true;
+          btn.innerText = '⏹️ Pause Ambient Noise';
+        } catch (e) {
+          alert('Web Audio unavailable: ' + e);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
